@@ -115,13 +115,20 @@ class ZCiCalNode {
     function addNode($node) {
         if(array_key_exists($node->getName(), $this->data))
         {
-            if(!is_array($this->data[$node->getName()]))
+            if(in_array(strtolower($node->getName()), array('prodid', 'version', 'calscale', 'method')))
             {
-                $existingNode = $this->data[$node->getName()];
-                $this->data[$node->getName()] = array();
-                $this->data[$node->getName()][] = $existingNode;
+                $this->data[$node->getName()] = $node;
             }
-            $this->data[$node->getName()][] = $node;
+            else
+            {
+                if(!is_array($this->data[$node->getName()]))
+                {
+                    $existingNode = $this->data[$node->getName()];
+                    $this->data[$node->getName()] = array();
+                    $this->data[$node->getName()][] = $existingNode;
+                }
+                $this->data[$node->getName()][] = $node;
+            }
         }
         else
         {
